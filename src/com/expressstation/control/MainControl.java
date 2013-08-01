@@ -19,7 +19,7 @@ public class MainControl extends ParentControl implements OperateObserver{
 		MainControl controlCenter = new MainControl();
 		if (controlCenter.init()) {
 			controlCenter.start();
-		}
+		} 
 	}
 
 	/** 如果以后有自检，可以在这边加入,暂时空缺 */

@@ -28,6 +28,7 @@ public class LoginPage extends ParentPage {
 	private JTextField mAccountField;
 	private JTextField mPasswordField;
 	private JDialog mJDialog;
+	private JLabel mTip;
 	private JFrame mScreen;
 
 	public LoginPage(JFrame screen, NotifyAble notifyAble) {
@@ -86,7 +87,7 @@ public class LoginPage extends ParentPage {
 		mPasswordField.setColumns(10);
 
 		JButton btnNewButton = new JButton("确定");
-		btnNewButton.setActionCommand(EmployeeControl.MSG_LOGIN_INFO_END + "");
+		btnNewButton.setActionCommand(EmployeeControl.MSG_LOGIN_INFO_START + "");
 		btnNewButton.addActionListener(this);
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.anchor = GridBagConstraints.WEST;
@@ -108,19 +109,29 @@ public class LoginPage extends ParentPage {
 
 	@Override
 	public void onNotify(int messageId, String... message) {
-		mJDialog.setVisible(false);      
+		mJDialog.setVisible(false);   
+		switch (messageId) {
+		case EmployeeControl.MSG_LOGIN_INFO_END:
+			//这个消息发过来只是为了关闭提示框
+			break;
+		case EmployeeControl.MSG_LOGIN_ERROR:
+			JOptionPane.showMessageDialog(mScreen, "账号或密码错误。请重试！");
+			mAccountField.setText("");
+			mPasswordField.setText("");
+			break;
+		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		switch (Integer.parseInt(arg0.getActionCommand())) {
-		case EmployeeControl.MSG_LOGIN_INFO_END:
+		case EmployeeControl.MSG_LOGIN_INFO_START:
 			String account = mAccountField.getText();
 			String password = mPasswordField.getText();
-			sendMessage(EmployeeControl.MSG_LOGIN_INFO_END, account, password);
+			sendMessage(EmployeeControl.MSG_LOGIN_INFO_START, account, password);
 			mJDialog = new JOptionPane().createDialog(mScreen, null);
-			JLabel jl = new JLabel("正在处理中，请稍等！", JLabel.CENTER);
-			mJDialog.setContentPane(jl);
+			mTip = new JLabel("正在处理中，请稍等！", JLabel.CENTER);
+			mJDialog.setContentPane(mTip);
 			mJDialog.setVisible(true);
 			break;
 		case EmployeeControl.MSG_CANCEL:

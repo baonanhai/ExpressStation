@@ -12,7 +12,9 @@ import com.expressstation.view.employee.LoginPage;
  * 2013-7-21
  */
 public class EmployeeControl extends ParentControl implements NetworkObserver{
-	public static final int MSG_LOGIN_INFO_END = 1;
+	public static final int MSG_LOGIN_INFO_START = 1;
+	public static final int MSG_LOGIN_INFO_END = 2;
+	public static final int MSG_LOGIN_ERROR = 3;
 	
 	private OperateObserver mOperateObserver;
 	
@@ -28,7 +30,7 @@ public class EmployeeControl extends ParentControl implements NetworkObserver{
 	@Override
 	public void handleMessage(int messageId, String... message) {
 		switch (messageId) {
-		case MSG_LOGIN_INFO_END:
+		case MSG_LOGIN_INFO_START:
 			NetworkClient networkClient = NetworkClient.getInstance(this);
 			networkClient.login(message[0], message[1]);
 			break;
@@ -45,7 +47,7 @@ public class EmployeeControl extends ParentControl implements NetworkObserver{
 	}
 	
 	private void showEmployeeInfo() {
-		notifyPage(10000);
+		notifyPage(MSG_LOGIN_INFO_END);
 		startPage(EmployeeInfoPage.class);
 	}
 
@@ -53,6 +55,8 @@ public class EmployeeControl extends ParentControl implements NetworkObserver{
 	public void onNetOperateEnd(String content) {
 		if (content.equals("true")) {
 			showEmployeeInfo();
+		} else {
+			notifyPage(MSG_LOGIN_ERROR);
 		}
 	}
 }
