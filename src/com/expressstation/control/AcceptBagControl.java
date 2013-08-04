@@ -4,6 +4,8 @@ import com.expressstation.control.hardware.BoxAdapter;
 import com.expressstation.control.hardware.PrinterAdapter;
 import com.expressstation.control.hardware.WeightAdapter;
 import com.expressstation.model.ExpresstationInfo;
+import com.expressstation.net.NetworkClient;
+import com.expressstation.net.NetworkObserver;
 import com.expressstation.view.accpet.AccpetBagTipPage;
 import com.expressstation.view.accpet.ExpressInfoPage;
 import com.expressstation.view.accpet.WeightPage;
@@ -15,7 +17,7 @@ import com.expressstation.view.accpet.WeightPage;
  * 
  *         2013-7-21
  */
-public class AcceptBagControl extends ParentControl {
+public class AcceptBagControl extends ParentControl implements NetworkObserver{
 	public static final int MSG_WEIGHT_END = 1;
 	public static final int MSG_WEIGHT_RETRY = 2;
 	public static final int MSG_WEIGHT_CONFIRM_END = 3;
@@ -64,8 +66,9 @@ public class AcceptBagControl extends ParentControl {
 			mExpresstationInfo.setToLocation(message[1]);
 			mExpresstationInfo.setToMobile(message[2]);
 			mExpresstationInfo.setFromPerson(message[3]);
-			mExpresstationInfo.setToLocation(message[4]);
-			mExpresstationInfo.setToMobile(message[5]);
+			mExpresstationInfo.setFromLocation(message[4]);
+			mExpresstationInfo.setFromMobile(message[5]);
+			mExpresstationInfo.setState(Integer.parseInt(message[6]));
 			printExpresswaybill();
 			break;
 		case MSG_PRINT_END:
@@ -78,6 +81,8 @@ public class AcceptBagControl extends ParentControl {
 			mOperateObserver.operateEnd();
 			break;
 		case MSG_END:
+			NetworkClient client = NetworkClient.getInstance(this);
+			client.commitBagInfo(mExpresstationInfo);
 			mOperateObserver.operateEnd();
 			break;
 		default:
@@ -104,5 +109,11 @@ public class AcceptBagControl extends ParentControl {
 	private void openBox() {
 		mBoxAdapter = new BoxAdapter(this);
 		mBoxAdapter.open();
+	}
+
+	@Override
+	public void onNetOperateEnd(String content) {
+		System.out.print("sssss"+ content);
+		
 	}
 }

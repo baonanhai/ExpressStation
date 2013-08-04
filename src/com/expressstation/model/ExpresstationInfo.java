@@ -1,6 +1,20 @@
 package com.expressstation.model;
 
+
 public class ExpresstationInfo {
+	/**已揽件*/
+	public static final int state_accept = 0;
+	/**快件已从小站取出，在入库过程中*/
+	public static final int state_ = 1;
+	/**快件出库，在去小站过程中*/
+	public static final int state_despatch = 2;
+	/**快件已进入小站，等待取件*/
+	public static final int state_in_station = 3;
+	/**快件已经被取走*/
+	public static final int state_take = 4;
+	
+	private String id;
+	private String time;
 	private String weight;
 	private String toPerson;
 	private String toLocation;
@@ -9,6 +23,7 @@ public class ExpresstationInfo {
 	private String fromLocation;
 	private String fromMobile;
 	private String price;
+	private int state = state_accept;
 
 	public String getWeight() {
 		return weight;
@@ -65,12 +80,36 @@ public class ExpresstationInfo {
 	public void setFromMobile(String fromMobile) {
 		this.fromMobile = fromMobile;
 	}
-	
+
 	public String getPrice() {
 		return price;
 	}
 
 	public void setPrice(String price) {
 		this.price = price;
+	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

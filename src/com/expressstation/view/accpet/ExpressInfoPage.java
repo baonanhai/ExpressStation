@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 import com.expressstation.control.AcceptBagControl;
 import com.expressstation.control.NotifyAble;
+import com.expressstation.model.ExpresstationInfo;
 import com.expressstation.view.ParentPage;
 
 /**
@@ -182,7 +183,7 @@ public class ExpressInfoPage extends ParentPage{
 			String fromLocationStr = fromLocation.getText();
 			String fromMobileStr = fromMobile.getText();
 			sendMessage(AcceptBagControl.MSG_EXPRESSTATION_INFO_END, toPersonStr, toLocationStr, toMobileStr,
-					fromPersonStr, fromLocationStr, fromMobileStr);
+					fromPersonStr, fromLocationStr, fromMobileStr, ExpresstationInfo.state_accept + "");
 			break;
 		case AcceptBagControl.MSG_CANCEL	:
 			sendMessage(AcceptBagControl.MSG_CANCEL);

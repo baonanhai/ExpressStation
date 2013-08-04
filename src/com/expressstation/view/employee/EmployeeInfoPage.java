@@ -35,7 +35,7 @@ public class EmployeeInfoPage extends ParentPage {
 	private JButton mAccpetButton;
 	private JButton mTakeButton;
 	private JButton mLeftButton;
-	
+
 	private CardLayout mCardLayout;
 	private JPanel mContentPanel;
 
@@ -93,14 +93,14 @@ public class EmployeeInfoPage extends ParentPage {
 		leftBagTable.setModel(new MyTableModel(tableData2, columnNames2));
 		JScrollPane pane2 = new JScrollPane(leftBagTable);
 		mContentPanel.add(pane2, STATE_LEFT_BAG + "");
-		
+
 		JButton okButton = new JButton("退出");
 		okButton.setActionCommand(EmployeeControl.MSG_END + "");
 		okButton.addActionListener(this);
 		JPanel okPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		okPanel.add(okButton);
 		content.add(okPanel, BorderLayout.SOUTH);
-		
+
 		mState = STATE_ACCEPT_BAG;
 		resetUI();
 	}
@@ -132,12 +132,15 @@ public class EmployeeInfoPage extends ParentPage {
 		switch (Integer.parseInt(arg0.getActionCommand())) {
 		case STATE_ACCEPT_BAG:
 			mState = STATE_ACCEPT_BAG;
+			sendMessage(EmployeeControl.MSG_ACCEPT_BAGS);
 			break;
 		case STATE_TAKE_BAG:
 			mState = STATE_TAKE_BAG;
+			sendMessage(EmployeeControl.MSG_DESPATCH_BAGS);
 			break;
 		case STATE_LEFT_BAG:
 			mState = STATE_LEFT_BAG;
+			sendMessage(EmployeeControl.MSG_LEFT_BAGS);
 			break;
 		case EmployeeControl.MSG_END:
 			sendMessage(EmployeeControl.MSG_END);
@@ -149,9 +152,18 @@ public class EmployeeInfoPage extends ParentPage {
 		mCardLayout.show(mContentPanel, mState + "");
 	}
 
+	/**
+	 * 这边会获取到服务器上的包裹数据，把这边获取到的数据显示到界面
+	 */
 	@Override
 	public void onNotify(int messageId, String... message) {
-
+		switch (messageId) {
+		case EmployeeControl.MSG_BAG_INFO:
+			System.out.print("MSG_BAG_INFO:" + message[0]);
+			break;
+		default:
+			break;
+		}
 	}
 
 	class MyTableModel extends DefaultTableModel {
